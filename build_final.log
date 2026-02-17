@@ -1,0 +1,24 @@
+
+> greivanced@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 22.6s
+  Running TypeScript ...
+Failed to compile.
+
+./src/app/admin/dashboard/page.tsx:73:44
+Type error: Property 'assignedTo' does not exist on type '{ assignments: ({ officer: { citizenProfile: { createdAt: Date; deletedAt: Date | null; fullName: string; userId: string; } | null; } & { id: string; email: string; aadhaarHash: string | null; ... 6 more ...; deletedAt: Date | null; }; } & { ...; })[]; ward: { ...; }; citizen: { ...; } & { ...; }; category: { ...; }...'.
+
+[0m [90m 71 |[39m                                     [33m<[39m[33mtd[39m[33m>[39m{c[33m.[39mtitle}[33m<[39m[33m/[39m[33mtd[39m[33m>[39m
+ [90m 72 |[39m                                     [33m<[39m[33mtd[39m[33m>[39m{c[33m.[39mward[33m?[39m[33m.[39mname [33m||[39m [32m'-'[39m}[33m<[39m[33m/[39m[33mtd[39m[33m>[39m
+[31m[1m>[22m[39m[90m 73 |[39m                                     [33m<[39m[33mtd[39m[33m>[39m{c[33m.[39massignedTo[33m?[39m[33m.[39mname [33m||[39m [32m'Unassigned'[39m}[33m<[39m[33m/[39m[33mtd[39m[33m>[39m
+ [90m    |[39m                                            [31m[1m^[22m[39m
+ [90m 74 |[39m                                     [33m<[39m[33mtd[39m[33m>[39m
+ [90m 75 |[39m                                         [33m<[39m[33mspan[39m className[33m=[39m{[32m`${styles.status} ${styles[c.status]}`[39m}[33m>[39m
+ [90m 76 |[39m                                             {c[33m.[39mstatus}[0m
+Next.js build worker exited with code: 1 and signal: null

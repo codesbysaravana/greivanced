@@ -1,0 +1,103 @@
+.container {
+    max-width: 1200px;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    margin-top: 1.5rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table th {
+    background-color: var(--bg-color);
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.cellTitle {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.cellDesc {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.urgency {
+    display: inline-block;
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    background: #e2e8f0;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+}
+
+.status {
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+}
+
+.status.PENDING {
+    background: #fef9c3;
+    color: #a16207;
+}
+
+.status.IN_PROGRESS {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status.RESOLVED {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.status.REJECTED {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.actionForm {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.select {
+    padding: 0.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    font-size: 0.8rem;
+}
+
+.updateBtn {
+    padding: 0.25rem 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.updateBtn:hover {
+    background-color: #0f172a;
+}

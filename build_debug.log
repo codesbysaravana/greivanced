@@ -1,0 +1,57 @@
+
+> greivanced@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env
+
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+✓ Compiled successfully in 7.5s
+  Running TypeScript ...
+  Collecting page data using 11 workers ...
+Error: Failed to collect configuration for /admin/officers/new
+    at ignore-listed frames {
+  [cause]: Error [PrismaClientConstructorValidationError]: Unknown property datasources provided to PrismaClient constructor.
+  Read more at https://pris.ly/d/client-constructor
+      at module evaluation (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[root-of-the-server]__61715422._.js:40:171401)
+      at instantiateModule (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:740:9)
+      at getOrInstantiateModuleFromParent (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:763:12)
+      at Context.esmImport [as i] (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:228:20)
+      at module evaluation (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\_81169277._.js:1:9741)
+      at instantiateModule (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:740:9)
+      at getOrInstantiateModuleFromParent (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:763:12)
+      at Context.esmImport [as i] (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:228:20)
+}
+Error: Failed to collect configuration for /citizen/new-complaint
+    at ignore-listed frames {
+  [cause]: Error [PrismaClientConstructorValidationError]: Unknown property datasources provided to PrismaClient constructor.
+  Read more at https://pris.ly/d/client-constructor
+      at module evaluation (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[root-of-the-server]__61715422._.js:40:171401)
+      at instantiateModule (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:740:9)
+      at getOrInstantiateModuleFromParent (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:763:12)
+      at Context.esmImport [as i] (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:228:20)
+      at module evaluation (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\_81169277._.js:1:9741)
+      at instantiateModule (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:740:9)
+      at getOrInstantiateModuleFromParent (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:763:12)
+      at Context.esmImport [as i] (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:228:20)
+}
+Error: Failed to collect configuration for /admin/dashboard
+    at ignore-listed frames {
+  [cause]: Error [PrismaClientConstructorValidationError]: Unknown property datasources provided to PrismaClient constructor.
+  Read more at https://pris.ly/d/client-constructor
+      at module evaluation (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[root-of-the-server]__61715422._.js:40:171401)
+      at instantiateModule (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:740:9)
+      at getOrInstantiateModuleFromParent (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:763:12)
+      at Context.esmImport [as i] (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:228:20)
+      at module evaluation (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\_81169277._.js:1:9741)
+      at instantiateModule (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:740:9)
+      at getOrInstantiateModuleFromParent (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:763:12)
+      at Context.esmImport [as i] (C:\Users\csara\Downloads\blazer3\greivanced\.next\server\chunks\ssr\[turbopack]_runtime.js:228:20)
+}
+
+> Build error occurred
+Error: Failed to collect page data for /admin/officers/new
+    at ignore-listed frames {
+  type: 'Error'
+}
