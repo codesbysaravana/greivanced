@@ -9,11 +9,14 @@ interface Ward {
     name: string
 }
 
-const initialState = {
-    error: '',
+interface Category {
+    id: string
+    name: string
 }
 
-export default function ComplaintForm({ wards }: { wards: Ward[] }) {
+const initialState: { error?: string; success?: boolean } = {}
+
+export default function ComplaintForm({ wards, categories }: { wards: Ward[], categories: Category[] }) {
     const [state, formAction, isPending] = useActionState(createComplaint, initialState)
     const [locationStatus, setLocationStatus] = useState<string>('')
     const [coords, setCoords] = useState<{ lat: number, lng: number } | null>(null)
@@ -57,13 +60,11 @@ export default function ComplaintForm({ wards }: { wards: Ward[] }) {
             <div className={styles.row}>
                 <div className={styles.formGroup}>
                     <label htmlFor="category" className={styles.label}>Category</label>
-                    <select name="category" id="category" className={styles.select}>
-                        <option value="Sanitation">Sanitation</option>
-                        <option value="Roads">Roads</option>
-                        <option value="Electricity">Electricity</option>
-                        <option value="Water">Water Supply</option>
-                        <option value="Health">Health</option>
-                        <option value="Other">Other</option>
+                    <select name="category" id="category" required className={styles.select}>
+                        <option value="">-- Select Category --</option>
+                        {categories.map(cat => (
+                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
                     </select>
                 </div>
 
@@ -79,32 +80,35 @@ export default function ComplaintForm({ wards }: { wards: Ward[] }) {
             </div>
 
             <div className={styles.formGroup}>
+                <label htmlFor="wardId" className={styles.label}>Ward</label>
+                <select name="wardId" id="wardId" required className={styles.select}>
+                    <option value="">-- Select Ward --</option>
+                    {wards.map(ward => (
+                        <option key={ward.id} value={ward.id}>{ward.name}</option>
+                    ))}
+                </select>
+            </div>
+
+            <div className={styles.formGroup}>
                 <label htmlFor="address" className={styles.label}>Address (Optional)</label>
                 <input name="address" id="address" className={styles.input} placeholder="Street address or landmark" />
             </div>
 
             <div className={styles.formGroup}>
-                <label className={styles.label}>Location</label>
+                <label className={styles.label}>Location (Optional)</label>
                 <button type="button" onClick={handleGetLocation} className={styles.locationBtn}>
-                    Get Current Location
+                    📍 Get Current Location
                 </button>
                 {locationStatus && <p className={styles.locationStatus}>{locationStatus}</p>}
                 {coords && (
                     <>
                         <input type="hidden" name="latitude" value={coords.lat} />
                         <input type="hidden" name="longitude" value={coords.lng} />
+                        <p className={styles.locationStatus}>
+                            Lat: {coords.lat.toFixed(4)}, Lng: {coords.lng.toFixed(4)}
+                        </p>
                     </>
                 )}
-            </div>
-
-            <div className={styles.formGroup}>
-                <label htmlFor="wardId" className={styles.label}>Ward (Optional if location provided)</label>
-                <select name="wardId" id="wardId" className={styles.select}>
-                    <option value="">-- Select Ward --</option>
-                    {wards.map(ward => (
-                        <option key={ward.id} value={ward.id}>{ward.name}</option>
-                    ))}
-                </select>
             </div>
 
             <div className={styles.checkboxGroup}>

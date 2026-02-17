@@ -1,76 +1,67 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { verifyToken } from '@/lib/jwt'
-import { Role } from '@prisma/client'
+import { verifyTokenEdge } from '@/lib/jwt'
 
-const PROTECTED_ROUTES: Record<string, Role[]> = {
-    '/admin': [Role.ADMIN],
-    '/officer': [Role.OFFICER],
-    '/citizen': [Role.CITIZEN]
+// Routes that don't need authentication
+const PUBLIC_PATHS = ['/login', '/register', '/']
+// Role → allowed route prefix mapping
+const ROLE_ROUTES: Record<string, string> = {
+    ADMIN: '/admin',
+    OFFICER: '/officer',
+    CITIZEN: '/citizen',
 }
 
-function getDashboardPath(role: string): string {
-    switch (role) {
-        case Role.ADMIN: return '/admin/dashboard'
-        case Role.OFFICER: return '/officer/dashboard'
-        case Role.CITIZEN: return '/citizen/dashboard'
-        default: return '/'
-    }
-}
-
-export function middleware(request: NextRequest) {
-    const token = request.cookies.get('auth_token')?.value
+export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
 
-    // If user is on /login, /register, or landing page — check if they're already logged in
-    if (pathname === '/login' || pathname === '/register') {
-        if (token) {
-            const payload = verifyToken(token)
-            if (payload) {
-                // Already authenticated — redirect to their dashboard
-                return NextResponse.redirect(new URL(getDashboardPath(payload.role), request.url))
-            }
+    // Get the token from the cookie
+    const token = request.cookies.get('auth_token')?.value
+    const payload = token ? await verifyTokenEdge(token) : null
+
+    // If user is authenticated and visits public paths, redirect to their dashboard
+    if (payload && (pathname === '/login' || pathname === '/register' || pathname === '/')) {
+        return NextResponse.redirect(new URL(ROLE_ROUTES[payload.role] + '/dashboard', request.url))
+    }
+
+    // Allow public paths, static assets, api routes
+    if (
+        PUBLIC_PATHS.includes(pathname) ||
+        pathname.startsWith('/_next') ||
+        pathname.startsWith('/api') ||
+        pathname.startsWith('/favicon')
+    ) {
+        return NextResponse.next()
+    }
+
+    if (!payload) {
+        // No token or invalid token → redirect to login
+        const loginUrl = new URL('/login', request.url)
+        // Only set 'from' if it's a dashboard route, to avoid infinite redirect on login itself
+        if (!PUBLIC_PATHS.includes(pathname)) {
+            loginUrl.searchParams.set('from', pathname)
         }
-        return NextResponse.next()
+        const response = NextResponse.redirect(loginUrl)
+        if (token) response.cookies.delete('auth_token')
+        return response
     }
 
-    // Landing page is always accessible
-    if (pathname === '/') {
-        return NextResponse.next()
+    // Check role-based access
+    const userRole = payload.role
+    const allowedPrefix = ROLE_ROUTES[userRole]
+
+    if (allowedPrefix && pathname.startsWith('/admin') && userRole !== 'ADMIN') {
+        return NextResponse.redirect(new URL(ROLE_ROUTES[userRole] + '/dashboard', request.url))
+    }
+    if (allowedPrefix && pathname.startsWith('/officer') && userRole !== 'OFFICER') {
+        return NextResponse.redirect(new URL(ROLE_ROUTES[userRole] + '/dashboard', request.url))
+    }
+    if (allowedPrefix && pathname.startsWith('/citizen') && userRole !== 'CITIZEN') {
+        return NextResponse.redirect(new URL(ROLE_ROUTES[userRole] + '/dashboard', request.url))
     }
 
-    // Determine which roles are required for this route
-    let requiredRoles: Role[] = []
-    if (pathname.startsWith('/admin')) requiredRoles = PROTECTED_ROUTES['/admin']
-    else if (pathname.startsWith('/officer')) requiredRoles = PROTECTED_ROUTES['/officer']
-    else if (pathname.startsWith('/citizen')) requiredRoles = PROTECTED_ROUTES['/citizen']
-
-    // If no protected route matched, allow access
-    if (requiredRoles.length === 0) {
-        return NextResponse.next()
-    }
-
-    // No token — redirect to login
-    if (!token) {
-        return NextResponse.redirect(new URL('/login', request.url))
-    }
-
-    // Verify token and check role
-    try {
-        const payload = verifyToken(token)
-        if (!payload) {
-            return NextResponse.redirect(new URL('/login', request.url))
-        }
-        if (!requiredRoles.includes(payload.role as Role)) {
-            // User is logged in but doesn't have the right role — send to their own dashboard
-            return NextResponse.redirect(new URL(getDashboardPath(payload.role), request.url))
-        }
-        return NextResponse.next()
-    } catch {
-        return NextResponse.redirect(new URL('/login', request.url))
-    }
+    return NextResponse.next()
 }
 
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+    matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 }

@@ -1,0 +1,342 @@
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.header {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+}
+
+.header h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.trackList {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.trackCard {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transition: all 0.2s;
+}
+
+.trackCard:hover {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
+.cardTop {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.cardTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.cardMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: #f8fafc;
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+}
+
+.urgencyBadge {
+    padding: 0.4rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.urgencyLow {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.urgencyMedium {
+    background: #fffcf0;
+    color: #d97706;
+}
+
+.urgencyHigh {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.urgencyCritical {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.cardTimestamp {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    min-width: 140px;
+}
+
+.dateLabel {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.dateValue {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0.25rem 0;
+}
+
+.dateAgo {
+    font-size: 0.8125rem;
+    color: #64748b;
+}
+
+/* Timeline */
+.timeline {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 0;
+    position: relative;
+    max-width: 600px;
+}
+
+.timelineStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+.stepDot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: all 0.3s;
+}
+
+.stepCompleted {
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+.stepCurrent {
+    border-color: #2563eb;
+    background: white;
+}
+
+.stepPulse {
+    width: 12px;
+    height: 12px;
+    background: #2563eb;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    }
+}
+
+.stepLine {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    width: 100%;
+    height: 3px;
+    background: #e2e8f0;
+    z-index: 0;
+}
+
+.stepLineCompleted {
+    background: #2563eb;
+}
+
+.stepLabel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stepName {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+}
+
+.stepNameActive {
+    color: #2563eb;
+}
+
+.stepDate {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+/* Banners */
+.rejectedBanner,
+.resolvedBanner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+}
+
+.rejectedBanner {
+    background: #fff1f2;
+    color: #9f1239;
+    border: 1px solid #fecdd3;
+}
+
+.resolvedBanner {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+
+.rejectedIcon {
+    color: #e11d48;
+}
+
+.resolvedIcon {
+    color: #22c55e;
+}
+
+/* Assigned Offset */
+.assignedInfo {
+    background: #f8fafc;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    border: 1px solid #f1f5f9;
+}
+
+.officerAvatar {
+    width: 28px;
+    height: 28px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2563eb;
+    border: 1px solid #e2e8f0;
+}
+
+.assignedLabel {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.assignedName {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.cardFooter {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.complaintId {
+    font-size: 0.7rem;
+    font-weight: 700;
+    font-family: monospace;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+@media (max-width: 640px) {
+    .cardTop {
+        flex-direction: column;
+    }
+
+    .cardTimestamp {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .timeline {
+        gap: 0.5rem;
+    }
+
+    .stepName {
+        font-size: 0.65rem;
+    }
+}

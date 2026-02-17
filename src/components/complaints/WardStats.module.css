@@ -1,0 +1,246 @@
+/* ==================== Ward Stats Wrapper ==================== */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.emptyWard {
+    padding: 1rem;
+    background: #fef3c7;
+    border-radius: 8px;
+    color: #92400e;
+    margin-bottom: 1.5rem;
+}
+
+/* ==================== Ward Header ==================== */
+.wardHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.wardInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.wardLabel {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+}
+
+.select {
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--border-color);
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    min-width: 260px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.wardBadge {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.125rem;
+}
+
+.wardName {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.wardDistrict {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* ==================== Stats Grid ==================== */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.statCard {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem;
+    border-radius: 12px;
+    background: white;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.35s ease forwards;
+    opacity: 0;
+}
+
+.statCard:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.statCard:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.statCard:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.statCard:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.statCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+}
+
+.statTotal {
+    border-left: 4px solid var(--accent-color);
+}
+
+.statPending {
+    border-left: 4px solid #f59e0b;
+}
+
+.statProgress {
+    border-left: 4px solid #3b82f6;
+}
+
+.statResolved {
+    border-left: 4px solid #10b981;
+}
+
+.statIcon {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-color);
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.statBody {
+    display: flex;
+    flex-direction: column;
+}
+
+.statValue {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--primary-color);
+}
+
+.statLabel {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-secondary);
+    margin-top: 0.125rem;
+}
+
+/* ==================== Progress Bar ==================== */
+.progressSection {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.progressHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.progressTitle {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.progressPercent {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.progressTrack {
+    height: 10px;
+    background: #f1f5f9;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #34d399);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .wardHeader {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .wardBadge {
+        align-items: flex-start;
+    }
+
+    .select {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}

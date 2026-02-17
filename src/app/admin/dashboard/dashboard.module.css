@@ -1,83 +1,167 @@
 .container {
-    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    letter-spacing: -0.02em;
 }
 
 .statsGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.5rem;
-    margin-bottom: 2rem;
 }
 
 .statCard {
     background: white;
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    padding: 1.75rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.statHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.statIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .statCard h3 {
     font-size: 0.875rem;
     color: var(--text-secondary);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .statValue {
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 2.25rem;
+    font-weight: 800;
     color: var(--primary-color);
+    margin: 0.5rem 0;
 }
 
-.statValue.pending {
-    color: #d97706;
+.statTrend {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
 }
 
-.statValue.progress {
+/* Colors */
+.totalIcon {
+    background: #eff6ff;
     color: #2563eb;
 }
 
-.statValue.resolved {
-    color: #059669;
+.pendingIcon {
+    background: #fffcf0;
+    color: #d97706;
+}
+
+.progressIcon {
+    background: #f0fdf4;
+    color: #16a34a;
+}
+
+.resolvedIcon {
+    background: #fdf2f8;
+    color: #db2777;
 }
 
 .section {
-    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
 }
 
-.section h2 {
-    margin-bottom: 1rem;
+@media (max-width: 1100px) {
+    .section {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+}
+
+.card h2 {
     font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .tableWrapper {
     width: 100%;
     overflow-x: auto;
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
 }
 
 .table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9375rem;
 }
 
-.table th,
-.table td {
+.table th {
     padding: 1rem;
     text-align: left;
+    color: var(--text-secondary);
+    font-weight: 600;
     border-bottom: 1px solid var(--border-color);
+}
+
+.table td {
+    padding: 1.25rem 1rem;
+    border-bottom: 1px solid #f8fafc;
+}
+
+.table tr:last-child td {
+    border-bottom: none;
 }
 
 .status {
     font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.35rem 0.75rem;
     border-radius: 999px;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .status.PENDING {
@@ -95,49 +179,43 @@
     color: #15803d;
 }
 
-.status.REJECTED {
-    background: #fee2e2;
-    color: #b91c1c;
-}
-
 .barChart {
-    background: white;
-    padding: 1.5rem;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
 .barItem {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.barMeta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
 }
 
 .barLabel {
-    width: 150px;
-    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.barCount {
     color: var(--text-secondary);
 }
 
 .barTrack {
-    flex: 1;
     background: #f1f5f9;
-    height: 24px;
-    border-radius: 4px;
+    height: 8px;
+    border-radius: 999px;
     overflow: hidden;
 }
 
 .barFill {
     height: 100%;
-    background: var(--accent-color);
-    color: white;
-    font-size: 0.75rem;
-    display: flex;
-    align-items: center;
-    padding-left: 0.5rem;
-    font-weight: 600;
+    background: linear-gradient(90deg, #3b82f6, #2563eb);
+    border-radius: 999px;
+    transition: width 1s ease-out;
 }

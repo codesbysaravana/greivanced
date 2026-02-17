@@ -1,49 +1,122 @@
 .container {
-    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
 
 .header {
-    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.wardView {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.wardSection {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s;
+}
+
+.wardSection:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.wardHeader {
+    padding: 1.25rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
+    background: #ffffff;
+    user-select: none;
 }
 
-.tableWrapper {
-    width: 100%;
-    overflow-x: auto;
-    background: white;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
+.wardHeaderMain {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
+.headerIcon {
+    color: var(--accent-color);
 }
 
-.table th,
-.table td {
+.wardHeaderMain h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.wardBadge {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.complaintList {
+    background: #f8fafc;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.noComplaints {
+    text-align: center;
+    color: #64748b;
+    font-style: italic;
     padding: 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
-    vertical-align: top;
 }
 
-.table th {
-    background: var(--bg-color);
-    font-weight: 600;
-    color: var(--text-secondary);
+.complaintCard {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.25rem;
+    transition: transform 0.2s;
+}
+
+.complaintCard:hover {
+    transform: translateX(4px);
+    border-color: var(--accent-color);
+}
+
+.cardMain {
+    flex: 1;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .status {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 999px;
-    font-weight: 600;
-    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    text-transform: uppercase;
 }
 
 .status.PENDING {
@@ -66,42 +139,147 @@
     color: #b91c1c;
 }
 
-.urgency {
-    display: inline-block;
-    padding: 0.125rem 0.375rem;
-    border-radius: 4px;
-    background: #e2e8f0;
-    font-size: 0.7rem;
+.date {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.cardMain h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.cardMain p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.5;
+}
+
+.cardSide {
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid #f1f5f9;
+}
+
+.sideItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.officerBox {
     margin-top: 0.25rem;
 }
 
-.cellTitle {
-    font-weight: 500;
-    color: var(--primary-color);
+.officerBox strong {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #94a3b8;
     margin-bottom: 0.25rem;
 }
 
-.cellDesc {
+.officerBox p {
     font-size: 0.75rem;
-    color: var(--text-secondary);
-    max-width: 250px;
+    font-weight: 600;
+    color: #334155;
+    margin: 0;
 }
 
-.rowAction {
-    margin-top: 0.5rem;
+.adminActions {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8f0;
 }
 
-.escalateBtn {
-    background: none;
-    border: 1px solid var(--danger-color);
-    color: var(--danger-color);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius);
-    font-size: 0.75rem;
+.manageBtn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
 }
 
-.escalateBtn:hover {
-    background: var(--danger-color);
+.manageBtn:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.statusFormWrapper {
+    margin-top: 1rem;
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    animation: fadeIn 0.15s ease-out;
+}
+
+.inlineForm {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.select {
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    font-size: 0.875rem;
+    color: #0f172a;
+}
+
+.remarksInput {
+    flex: 1;
+    min-width: 240px;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.875rem;
+}
+
+.confirmBtn {
+    background: #0f172a;
     color: white;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.confirmBtn:hover {
+    background: #2563eb;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

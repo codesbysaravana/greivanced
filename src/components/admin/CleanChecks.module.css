@@ -1,0 +1,422 @@
+.cleanChecksWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Run Button Styling */
+.runBtn {
+    background: #0f172a;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.runBtn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+.runBtn.loading {
+    opacity: 0.8;
+    background: #334155;
+    cursor: wait;
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Global Alert Notification */
+.globalAlert {
+    position: relative;
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: white;
+    padding: 1.5rem 2.5rem;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+    animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alertPulse {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    animation: pulseBG 2s infinite ease-in-out;
+}
+
+@keyframes pulseBG {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+}
+
+.alertContent {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.alertIcon {
+    background: rgba(255, 255, 255, 0.2);
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+}
+
+.alertMessage h2 {
+    font-size: 1.4rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: 0.05em;
+    color: white;
+}
+
+.alertMessage p {
+    margin: 0.25rem 0 0;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.detailsBtn {
+    position: relative;
+    background: white;
+    color: #ef4444;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.globalAlert:hover .detailsBtn {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* All Clear Feedback */
+.allClearFeedback {
+    background: #f0fdf4;
+    color: #15803d;
+    padding: 1rem 1.5rem;
+    border-radius: 14px;
+    border: 1px solid #bbf7d0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 600;
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.checkMark {
+    width: 24px;
+    height: 24px;
+    background: #22c55e;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+}
+
+/* Large Intervention Modal */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.modal {
+    background: white;
+    width: 100%;
+    max-width: 1000px;
+    max-height: 85vh;
+    border-radius: 32px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modalHeader {
+    padding: 2.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.modalTitle h2 {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+}
+
+.modalTitle p {
+    color: #64748b;
+    margin: 0.5rem 0 0;
+}
+
+.closeModal {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: all 0.2s;
+}
+
+.closeModal:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fecaca;
+}
+
+.modalScroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 2.5rem 2.5rem;
+}
+
+.issueGroup {
+    margin-top: 2.5rem;
+}
+
+.groupHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.groupIcon {
+    width: 36px;
+    height: 36px;
+    background: #f8fafc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+}
+
+.issueGroup:first-child .groupIcon {
+    color: #ef4444;
+    background: #fee2e2;
+}
+
+.issueGroup:last-child .groupIcon {
+    color: #f59e0b;
+    background: #fef3c7;
+}
+
+.groupHeader h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #334155;
+}
+
+.issueGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.issueCard {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: all 0.2s;
+}
+
+.issueCard:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.issueTag {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.65rem;
+    background: #fee2e2;
+    color: #b91c1c;
+    border-radius: 6px;
+    width: fit-content;
+}
+
+.issueCard.stalled .issueTag {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.issueCard h4 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.issueLocation {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.issueFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.timestamp,
+.timeDelay {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.timeDelay {
+    color: #ea580c;
+}
+
+.assignedOfficer {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #475569;
+}
+
+.modalFooter {
+    padding: 2rem 2.5rem;
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalFooter p {
+    font-size: 0.9rem;
+    color: #64748b;
+    max-width: 500px;
+}
+
+.dismissBtn {
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 0.85rem 2rem;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dismissBtn:hover {
+    background: #334155;
+}

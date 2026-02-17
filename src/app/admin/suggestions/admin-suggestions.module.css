@@ -1,0 +1,135 @@
+.container {
+    padding: 2rem;
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    color: var(--text-secondary);
+}
+
+.suggestionList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.2s;
+}
+
+.card.reviewed {
+    border-left: 5px solid #22c55e;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader {
+    margin-bottom: 1rem;
+}
+
+.meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8125rem;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    align-items: center;
+}
+
+.tag {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.cardHeader h3 {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+}
+
+.cardBody {
+    margin-bottom: 1.5rem;
+}
+
+.description {
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.author {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-style: italic;
+}
+
+.cardFooter {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.responseGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.responseGroup label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.textarea {
+    min-height: 80px;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    resize: vertical;
+    background: #f8fafc;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background: white;
+}
+
+.saveBtn {
+    align-self: flex-end;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.saveBtn:hover {
+    background: #1e40af;
+}
+
+.saveBtn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+}

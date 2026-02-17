@@ -5,9 +5,7 @@ import Link from 'next/link'
 import styles from '../auth.module.css'
 import { register } from '@/actions/auth'
 
-const initialState = {
-    error: '',
-}
+const initialState = { error: '' }
 
 export default function RegisterPage() {
     const [state, formAction, isPending] = useActionState(register, initialState)
@@ -15,6 +13,7 @@ export default function RegisterPage() {
     return (
         <div>
             <h1 className={styles.title}>Create Account</h1>
+            <p className={styles.subtitle}>Join CivicResolve as a citizen</p>
 
             {state?.error && <div className={styles.error}>{state.error}</div>}
 
@@ -27,7 +26,8 @@ export default function RegisterPage() {
                         type="text"
                         required
                         className={styles.input}
-                        placeholder="John Doe"
+                        placeholder="Your full name"
+                        minLength={2}
                     />
                 </div>
 
@@ -39,7 +39,7 @@ export default function RegisterPage() {
                         type="email"
                         required
                         className={styles.input}
-                        placeholder="john@example.com"
+                        placeholder="you@example.com"
                     />
                 </div>
 
@@ -62,13 +62,13 @@ export default function RegisterPage() {
                         type="password"
                         required
                         className={styles.input}
-                        placeholder="••••••••"
+                        placeholder="Min. 6 characters"
                         minLength={6}
                     />
                 </div>
 
                 <button type="submit" className={styles.submitBtn} disabled={isPending}>
-                    {isPending ? 'Creating Account...' : 'Register'}
+                    {isPending ? 'Creating Account...' : 'Create Account →'}
                 </button>
             </form>
 

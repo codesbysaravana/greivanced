@@ -1,54 +1,43 @@
-import { getAssignedComplaints } from '@/actions/officer'
-import styles from './dashboard.module.css' // We can reuse citizen styles or create new
-import { format } from 'date-fns'
-import ComplaintStatusForm from '@/components/officer/ComplaintStatusForm'
+import { getWardComplaints, getOfficerWards } from '@/actions/officer'
+import OfficerDashboardClient from '@/components/officer/OfficerDashboardClient'
+import { getAuthSession } from '@/lib/jwt'
+import { prisma } from '@/lib/prisma'
+import { redirect } from 'next/navigation'
+import { Role } from '@prisma/client'
+
+export const dynamic = 'force-dynamic'
 
 export default async function OfficerDashboard() {
-    const complaints = await getAssignedComplaints()
+    const session = await getAuthSession()
+    if (!session || session.role !== Role.OFFICER) {
+        redirect('/login')
+    }
+
+    const officer = await prisma.user.findUnique({
+        where: { id: session.userId },
+        include: { officerProfile: { include: { ward: true } } },
+    })
+
+    if (!officer?.officerProfile?.wardId) {
+        return (
+            <div style={{ padding: '2rem', textAlign: 'center' }}>
+                <h1>No Ward Assigned</h1>
+                <p>Please contact an administrator to assign you to a ward.</p>
+            </div>
+        )
+    }
+
+    const wardId = officer.officerProfile.wardId
+    const complaints = await getWardComplaints(wardId)
+    const wards = await getOfficerWards() // We can still pass all wards if we want the selector for admins, but for /officer prefix it's better to just show the assigned one.
+    // For now, let's filter wards to only own ward to clean up the UI
+    const myWard = wards.filter(w => w.id === wardId)
 
     return (
-        <div className={styles.container}>
-            <h1>Ward Complaints</h1>
-
-            <div className={styles.tableWrapper}>
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Citizen</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {complaints.map(c => (
-                            <tr key={c.id}>
-                                <td>{c.id.slice(0, 8)}...</td>
-                                <td>{c.createdAt && format(c.createdAt, 'MMM d')}</td>
-                                <td>
-                                    <div className={styles.cellTitle}>{c.title}</div>
-                                    <div className={styles.cellDesc}>{c.descriptionRaw.substring(0, 50)}...</div>
-                                </td>
-                                <td>{c.category?.name} <span className={styles.urgency}>{c.urgencyLevel}</span></td>
-                                <td>{c.anonymousFlag ? 'Anonymous' : (c.citizen?.citizenProfile?.fullName || c.citizen?.email)}</td>
-                                <td>
-                                    {c.currentStatus && (
-                                        <span className={`${styles.status} ${styles[c.currentStatus]}`}>
-                                            {c.currentStatus}
-                                        </span>
-                                    )}
-                                </td>
-                                <td>
-                                    <ComplaintStatusForm complaintId={c.id} currentStatus={c.currentStatus} />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <OfficerDashboardClient
+            wards={myWard}
+            complaints={complaints}
+            selectedWardId={wardId}
+        />
     )
 }

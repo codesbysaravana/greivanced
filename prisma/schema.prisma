@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
+  previewFeatures = ["partialIndexes", "postgresqlExtensions"]
   engineType      = "client"
-  previewFeatures = ["postgresqlExtensions", "partialIndexes"]
 }
 
 datasource db {
@@ -26,6 +26,7 @@ model User {
   escalationsTo     ComplaintEscalation[] @relation("EscalatedTo")
   complaintsCreated Complaint[]           @relation("CreatedComplaints")
   officerProfile    OfficerProfile?
+  suggestions       Suggestion[]
 
   @@index([id], map: "idx_users_active", where: raw("((deleted_at IS NULL) AND (is_active = true))"))
   @@map("users")
@@ -53,18 +54,19 @@ model District {
 }
 
 model Ward {
-  id         String                   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  districtId String                   @map("district_id") @db.Uuid
-  name       String
-  population Int?                     @default(0)
-  boundary   Unsupported("geometry")?
-  createdAt  DateTime?                @default(now()) @map("created_at") @db.Timestamptz(6)
-  deletedAt  DateTime?                @map("deleted_at") @db.Timestamptz(6)
-  alerts     Alert[]
-  complaints Complaint[]
-  officers   OfficerProfile[]
-  metrics    WardDailyMetric[]
-  district   District                 @relation(fields: [districtId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  id          String                   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  districtId  String                   @map("district_id") @db.Uuid
+  name        String
+  population  Int?                     @default(0)
+  boundary    Unsupported("geometry")?
+  createdAt   DateTime?                @default(now()) @map("created_at") @db.Timestamptz(6)
+  deletedAt   DateTime?                @map("deleted_at") @db.Timestamptz(6)
+  alerts      Alert[]
+  complaints  Complaint[]
+  officers    OfficerProfile[]
+  suggestions Suggestion[]
+  metrics     WardDailyMetric[]
+  district    District                 @relation(fields: [districtId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([districtId], map: "idx_ward_district")
   @@index([name], map: "idx_ward_name")
@@ -198,6 +200,26 @@ model Alert {
 
   @@unique([wardId, alertType, referenceDate])
   @@map("alerts")
+}
+
+model Suggestion {
+  id            String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  citizenId     String    @map("citizen_id") @db.Uuid
+  wardId        String?   @map("ward_id") @db.Uuid
+  title         String
+  description   String
+  category      String    @default("General")
+  upvotes       Int       @default(0)
+  adminResponse String?   @map("admin_response")
+  isReviewed    Boolean   @default(false) @map("is_reviewed")
+  createdAt     DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  citizen       User      @relation(fields: [citizenId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  ward          Ward?     @relation(fields: [wardId], references: [id], onUpdate: NoAction)
+
+  @@index([wardId], map: "idx_suggestions_ward")
+  @@index([createdAt(sort: Desc)], map: "idx_suggestions_date")
+  @@map("suggestions")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.

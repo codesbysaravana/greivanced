@@ -1,105 +1,203 @@
-import { PrismaClient, Role } from '@prisma/client'
+import { PrismaClient, Role, DepartmentType } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
 import bcrypt from 'bcryptjs'
+import 'dotenv/config'
 
-const prisma = new PrismaClient()
+const connectionString = process.env.DATABASE_URL
+if (!connectionString) {
+    throw new Error('DATABASE_URL is not set')
+}
+
+const adapter = new PrismaPg({ connectionString })
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
     console.log('🌱 Starting seed...')
 
+    const password = await bcrypt.hash('password123', 10)
+
     // 1. Create Admin
-    const adminPassword = await bcrypt.hash('admin123', 10)
     const admin = await prisma.user.upsert({
         where: { email: 'admin@gov.in' },
         update: {},
         create: {
             email: 'admin@gov.in',
-            passwordHash: adminPassword,
+            passwordHash: password,
             role: Role.ADMIN,
             isActive: true,
-            // Create profile if needed, but for now basic user
         },
     })
-    console.log(`Created Admin: ${admin.email}`)
+    console.log(`✅ Admin: ${admin.email}`)
 
-    // 2. Create Districts & Wards (using Wards table)
-    const districts = ['Central', 'North', 'South', 'East', 'West']
+    // 2. Create a Citizen user
+    const citizen = await prisma.user.upsert({
+        where: { email: 'citizen@example.com' },
+        update: {},
+        create: {
+            email: 'citizen@example.com',
+            passwordHash: password,
+            role: Role.CITIZEN,
+            isActive: true,
+            citizenProfile: {
+                create: {
+                    fullName: 'Test Citizen',
+                },
+            },
+        },
+    })
+    console.log(`✅ Citizen: ${citizen.email}`)
+
+    // 3. Create Districts
+    const districtNames = ['Central', 'North', 'South', 'East', 'West']
+    const districts: { id: string; name: string }[] = []
+
+    for (const name of districtNames) {
+        const district = await prisma.district.upsert({
+            where: { id: (await prisma.district.findFirst({ where: { name } }))?.id || '00000000-0000-0000-0000-000000000000' },
+            update: {},
+            create: { name },
+        })
+        districts.push(district)
+        console.log(`✅ District: ${district.name}`)
+    }
+
+    // 4. Create Wards (2 per district)
+    const wards: { id: string; name: string }[] = []
 
     for (const district of districts) {
         for (let i = 1; i <= 2; i++) {
-            const wardName = `${district}-Ward-${i}`
-            // Note: PostGIS geometry is hard to seed via Prisma directly without raw query.
-            // We use createUnchecked or just omit geometry for now if optional (it is optional in schema? No, created via sql)
-            // But wkt_geometry is string? Schema says: geospatial fields are usually unsupported in Prisma seed without extensions?
-            // Schema has: geo_boundary: Unsupported("geometry(MultiPolygon, 4326)")?
-            // Actually the schema I saw earlier had `geo_boundary` as Unsupported.
-            // So we can't seed it easily. We will skip creating wards here or limit to just name if possible.
-            // But Ward model has name, districtName.
-            // Let's assume we can create basic ward record.
+            const wardName = `${district.name}-Ward-${i}`
+            const existing = await prisma.ward.findFirst({ where: { name: wardName } })
 
-            // Check if ward exists
-            const existingWard = await prisma.ward.findFirst({ where: { name: wardName } })
-
-            let wardId = existingWard?.id
-
-            if (!existingWard) {
-                // We might fail if boundary is required.
-                // But let's try assuming db has defaults or constraints allow null? 
-                // Schema likely requires it.
-                // Use executeRaw to insert if needed.
-                // For now, let's just seed Users/Officers and assume Wards exist or skip officer creation if specific ward logic is complex.
-                // But we need wards for officers.
-                // Let's try creating a dummy ward using raw sql if prisma fails.
-
-                try {
-                    // Try raw insert for PostGIS
-                    // formatting polygon: POLYGON((...))
-                    const wkt = "SRID=4326;MULTIPOLYGON(((77.1 28.5, 77.2 28.5, 77.2 28.6, 77.1 28.6, 77.1 28.5)))" // Dummy square
-                    const result = await prisma.$queryRaw`
-                        INSERT INTO wards (name, district_name, geo_boundary)
-                        VALUES (${wardName}, ${district}, ST_GeomFromText(${wkt}))
-                        RETURNING id
-                     `
-                    // result is array
-                    if (Array.isArray(result) && result.length > 0) {
-                        wardId = result[0].id
-                    }
-                } catch (e) {
-                    console.error(`Failed to create ward ${wardName}:`, e)
-                }
-            }
-
-            if (wardId) {
-                // 3. Create Officer
-                const officerEmail = `officer.${wardName.toLowerCase().replace(/[^a-z0-9]/g, '')}@gov.in`
-                const officerPassword = await bcrypt.hash('officer123', 10)
-
-                const officerUser = await prisma.user.upsert({
-                    where: { email: officerEmail },
-                    update: {},
-                    create: {
-                        email: officerEmail,
-                        passwordHash: officerPassword,
-                        role: Role.OFFICER,
-                        isActive: true,
-                        officerProfile: {
-                            create: {
-                                wardId: wardId,
-                                designation: 'Ward Officer'
-                            }
-                        },
-                        citizenProfile: {
-                            create: {
-                                fullName: `Officer ${wardName}`
-                            }
-                        }
-                    }
+            if (existing) {
+                wards.push(existing)
+                console.log(`  ↳ Ward exists: ${wardName}`)
+            } else {
+                const ward = await prisma.ward.create({
+                    data: {
+                        name: wardName,
+                        districtId: district.id,
+                        population: Math.floor(Math.random() * 50000) + 10000,
+                    },
                 })
-                console.log(`Created Officer: ${officerUser.email}`)
+                wards.push(ward)
+                console.log(`  ✅ Ward: ${wardName}`)
             }
         }
     }
 
-    console.log('✅ Seed completed')
+    // 5. Create Officers (one per ward)
+    for (const ward of wards) {
+        const officerEmail = `officer.${ward.name.toLowerCase().replace(/[^a-z0-9]/g, '')}@gov.in`
+
+        await prisma.user.upsert({
+            where: { email: officerEmail },
+            update: {},
+            create: {
+                email: officerEmail,
+                passwordHash: password,
+                role: Role.OFFICER,
+                isActive: true,
+                officerProfile: {
+                    create: {
+                        wardId: ward.id,
+                        designation: 'Ward Officer',
+                    },
+                },
+                citizenProfile: {
+                    create: {
+                        fullName: `Officer ${ward.name}`,
+                    },
+                },
+            },
+        })
+        console.log(`  ✅ Officer: ${officerEmail}`)
+    }
+
+    // 6. Create Departments & Categories
+    const departmentsData: { name: string; type: DepartmentType; categories: string[] }[] = [
+        {
+            name: 'Roads & Infrastructure',
+            type: DepartmentType.INFRASTRUCTURE,
+            categories: ['Potholes', 'Broken Streetlights', 'Damaged Footpath', 'Traffic Signal Issue'],
+        },
+        {
+            name: 'Sanitation & Waste',
+            type: DepartmentType.SANITATION,
+            categories: ['Garbage Collection', 'Open Drains', 'Public Toilet Maintenance', 'Illegal Dumping'],
+        },
+        {
+            name: 'Water Supply',
+            type: DepartmentType.WATER_SUPPLY,
+            categories: ['No Water Supply', 'Contaminated Water', 'Leaking Pipeline', 'Low Water Pressure'],
+        },
+        {
+            name: 'Electricity',
+            type: DepartmentType.ELECTRICITY,
+            categories: ['Power Outage', 'Exposed Wires', 'Faulty Transformer', 'Street Light Not Working'],
+        },
+        {
+            name: 'Health & Hygiene',
+            type: DepartmentType.HEALTH,
+            categories: ['Mosquito Breeding', 'Stagnant Water', 'Unclean Hospital', 'Food Safety Violation'],
+        },
+        {
+            name: 'Transport',
+            type: DepartmentType.TRANSPORT,
+            categories: ['Bus Route Issue', 'Missing Bus Stop', 'Road Safety Concern'],
+        },
+        {
+            name: 'General Administration',
+            type: DepartmentType.GENERAL_ADMIN,
+            categories: ['Noise Complaint', 'Encroachment', 'Unauthorized Construction', 'Other'],
+        },
+    ]
+
+    for (const dept of departmentsData) {
+        const existing = await prisma.department.findFirst({ where: { name: dept.name } })
+        let departmentId: string
+
+        if (existing) {
+            departmentId = existing.id
+            console.log(`  ↳ Department exists: ${dept.name}`)
+        } else {
+            const department = await prisma.department.create({
+                data: {
+                    name: dept.name,
+                    departmentType: dept.type,
+                    description: `${dept.name} department`,
+                    isActive: true,
+                },
+            })
+            departmentId = department.id
+            console.log(`  ✅ Department: ${dept.name}`)
+        }
+
+        // Create categories for this department
+        for (const catName of dept.categories) {
+            const existingCat = await prisma.complaintCategory.findFirst({
+                where: { name: catName, departmentId },
+            })
+
+            if (!existingCat) {
+                await prisma.complaintCategory.create({
+                    data: {
+                        name: catName,
+                        departmentId,
+                    },
+                })
+                console.log(`    ✅ Category: ${catName}`)
+            } else {
+                console.log(`    ↳ Category exists: ${catName}`)
+            }
+        }
+    }
+
+    console.log('\n🎉 Seed completed successfully!')
+    console.log('\n📋 Login credentials (all passwords: password123):')
+    console.log('  Admin:   admin@gov.in')
+    console.log('  Citizen: citizen@example.com')
+    console.log('  Officers: officer.<wardname>@gov.in')
 }
 
 main()
