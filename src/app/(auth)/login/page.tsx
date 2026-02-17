@@ -1,6 +1,7 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import styles from '../auth.module.css'
 import { login } from '@/actions/auth'
@@ -10,7 +11,24 @@ const initialState = {
 }
 
 export default function LoginPage() {
+    const router = useRouter()
     const [state, formAction, isPending] = useActionState(login, initialState)
+    const [isRedirecting, setIsRedirecting] = useState(false)
+
+    useEffect(() => {
+        if (state?.success && state?.redirectPath && !isRedirecting) {
+            console.log('Login successful, redirecting to:', state.redirectPath)
+            setIsRedirecting(true)
+            // Small delay to ensure cookie is set before redirect
+            // Use window.location for a full page reload to ensure cookie is available
+            const redirectPath = state.redirectPath
+            setTimeout(() => {
+                window.location.href = redirectPath
+            }, 100)
+        } else if (state?.error) {
+            console.error('Login error:', state.error)
+        }
+    }, [state, isRedirecting])
 
     return (
         <div>
@@ -35,7 +53,7 @@ export default function LoginPage() {
                     <label htmlFor="password" className={styles.label}>Password</label>
                     <input
                         id="password"
-                        name="password"
+                        name="password" 
                         type="password"
                         required
                         className={styles.input}

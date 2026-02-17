@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
   engineType      = "client"
-  previewFeatures = ["postgresqlExtensions", "partialIndexes"]
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
@@ -27,7 +27,7 @@ model User {
   complaintsCreated Complaint[]           @relation("CreatedComplaints")
   officerProfile    OfficerProfile?
 
-  @@index([id], map: "idx_users_active", where: raw("((deleted_at IS NULL) AND (is_active = true))"))
+  @@index([id], map: "idx_users_active")
   @@map("users")
 }
 
@@ -96,7 +96,7 @@ model Department {
   deletedAt      DateTime?           @map("deleted_at") @db.Timestamptz(6)
   categories     ComplaintCategory[]
 
-  @@index([id], map: "idx_departments_active", where: raw("((deleted_at IS NULL) AND (is_active = true))"))
+  @@index([id], map: "idx_departments_active")
   @@map("departments")
 }
 
@@ -137,9 +137,9 @@ model Complaint {
   ward                Ward                     @relation(fields: [wardId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@index([geoPoint], map: "idx_complaints_geo_gist", type: Gist)
-  @@index([id], map: "idx_complaints_active", where: raw("(deleted_at IS NULL)"))
+  @@index([id], map: "idx_complaints_active")
   @@index([wardId, currentStatus], map: "idx_complaints_ward_status")
-  @@index([currentStatus, createdAt(sort: Desc)], map: "idx_complaints_status_date", where: raw("(deleted_at IS NULL)"))
+  @@index([currentStatus, createdAt(sort: Desc)], map: "idx_complaints_status_date")
   @@map("complaints")
 }
 

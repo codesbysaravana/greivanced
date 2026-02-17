@@ -22,6 +22,7 @@ const registerSchema = z.object({
 export type AuthState = {
     error?: string
     success?: boolean
+    redirectPath?: string
 }
 
 export async function login(prevState: AuthState, formData: FormData): Promise<AuthState> {
@@ -29,21 +30,22 @@ export async function login(prevState: AuthState, formData: FormData): Promise<A
     const parsed = loginSchema.safeParse(data)
 
     if (!parsed.success) {
+        console.error('Login validation failed:', parsed.error)
         return { error: 'Invalid email or password format' }
     }
 
     const { email, password } = parsed.data
 
-    let redirectPath = '/'
-
     try {
         const user = await prisma.user.findUnique({ where: { email } })
         if (!user) {
+            console.error('User not found for email:', email)
             return { error: 'Invalid credentials' }
         }
 
         const isValid = await comparePassword(password, user.passwordHash)
         if (!isValid) {
+            console.error('Invalid password for user:', email)
             return { error: 'Invalid credentials' }
         }
 
@@ -58,21 +60,23 @@ export async function login(prevState: AuthState, formData: FormData): Promise<A
         })
 
         await setAuthCookie(token)
+        console.log('Login successful for user:', email, 'Role:', user.role)
 
         // Determine redirect path based on user role
+        let redirectPath = '/'
         switch (user.role) {
             case Role.ADMIN: redirectPath = '/admin/dashboard'; break
             case Role.OFFICER: redirectPath = '/officer/dashboard'; break
             case Role.CITIZEN: redirectPath = '/citizen/dashboard'; break
         }
+
+        // Return success with redirect path for client-side navigation
+        // redirect() doesn't work well with useActionState, so we handle it client-side
+        return { success: true, redirectPath }
     } catch (error) {
         console.error('Login error:', error)
-        return { error: 'Something went wrong' }
+        return { error: error instanceof Error ? error.message : 'Something went wrong' }
     }
-
-    // redirect() throws a NEXT_REDIRECT error internally, so it MUST be
-    // called outside the try-catch to avoid being swallowed.
-    redirect(redirectPath)
 }
 
 export async function register(prevState: AuthState, formData: FormData): Promise<AuthState> {
