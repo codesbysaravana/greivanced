@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className={styles.container}>
             <div className={styles.leftPanel}>
                 <div className={styles.brandContent}>
-                    <h1 className={styles.brandTitle}>CivicResolve</h1>
+                    <h1 className={styles.brandTitle}>Greivanced</h1>
                     <p className={styles.brandTagline}>
                         Your voice matters. Report civic issues, track progress, and help build a better community.
                     </p>

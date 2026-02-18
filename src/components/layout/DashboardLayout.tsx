@@ -66,7 +66,7 @@ export default function DashboardLayout({ children, role, userName }: DashboardL
                 <div className={styles.brand}>
                     <div className={styles.logoBox}>CR</div>
                     <div className={styles.brandText}>
-                        <h2>CivicResolve</h2>
+                        <h2>Greivanced</h2>
                         <span className={`${styles.roleBadge} ${styles[`role_${role}`]}`}>
                             {getRoleIcon()}
                             {role}

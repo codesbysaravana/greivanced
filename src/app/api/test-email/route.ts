@@ -9,7 +9,7 @@ export async function GET(request: Request) {
 
     const result = await sendStatusUpdateEmail({
         to: email,
-        subject: 'CivicResolve: Test Notification System',
+        subject: 'Greivanced: Test Notification System',
         title: 'Repair of Broken Streetlight',
         description: 'This is a test complaint description to verify the new Nodemailer integration and template rendering.',
         status: 'RESOLVED',

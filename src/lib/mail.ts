@@ -39,14 +39,14 @@ export async function sendStatusUpdateEmail({ to, subject, title, description, s
 
     try {
         const info = await transporter.sendMail({
-            from: `"CivicResolve Support" <${process.env.SMTP_USER}>`,
+            from: `"Greivanced Support" <${process.env.SMTP_USER}>`,
             to: to,
             subject: subject,
             html: `
                 <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px; border: 1px solid #e2e8f0; border-radius: 24px; background-color: #ffffff;">
                     <div style="text-align: center; margin-bottom: 30px;">
                         <div style="background: #2563eb; color: white; width: 50px; height: 50px; line-height: 50px; border-radius: 12px; display: inline-block; font-weight: 800; font-size: 20px;">CR</div>
-                        <h2 style="color: #0f172a; margin-top: 15px;">CivicResolve</h2>
+                        <h2 style="color: #0f172a; margin-top: 15px;">Greivanced</h2>
                     </div>
                     
                     <h1 style="color: #0f172a; font-size: 24px; font-weight: 800; margin-bottom: 20px; text-align: center;">Grievance Status Update</h1>
@@ -79,7 +79,7 @@ export async function sendStatusUpdateEmail({ to, subject, title, description, s
                     <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 30px 0;" />
                     
                     <p style="font-size: 12px; color: #94a3b8; text-align: center; line-height: 1.5;">
-                        This is an automated system notification from the CivicResolve Grievance Redressal platform.<br/>
+                        This is an automated system notification from the Greivanced Grievance Redressal platform.<br/>
                         Please do not reply directly to this email.
                     </p>
                 </div>

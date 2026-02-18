@@ -121,7 +121,7 @@ export async function updateComplaintStatus(
             // We use a non-blocking call or await depending on preference. Awaiting for reliability here.
             await sendStatusUpdateEmail({
                 to: complaint.citizen.email,
-                subject: `CivicResolve: Your complaint has been updated to ${status}`,
+                subject: `Greivanced: Your complaint has been updated to ${status}`,
                 title: complaint.title,
                 description: complaint.descriptionRaw,
                 status: status,

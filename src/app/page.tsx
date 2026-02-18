@@ -5,7 +5,7 @@ export default function LandingPage() {
   return (
     <div className={styles.container}>
       <main className={styles.hero}>
-        <h1 className={styles.title}>CivicResolve</h1>
+        <h1 className={styles.title}>Greivanced</h1>
         <p className={styles.subtitle}>
           Empowering citizens and officers to build a better community.
           Report issues, track progress, and resolve grievances efficiently.
@@ -22,7 +22,7 @@ export default function LandingPage() {
       </main>
 
       <footer className={styles.footer}>
-        &copy; {new Date().getFullYear()} CivicResolve. Government of India.
+        &copy; {new Date().getFullYear()} Greivanced. Government of India.
       </footer>
     </div>
   )

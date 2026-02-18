@@ -307,7 +307,7 @@ export async function adminUpdateComplaintStatus(
             console.log(`[AdminAction] Triggering email to ${complaint.citizen.email} for status: ${status}`)
             await sendStatusUpdateEmail({
                 to: complaint.citizen.email,
-                subject: `CivicResolve: Administrative Update - Your grievance is now ${status}`,
+                subject: `Greivanced: Administrative Update - Your grievance is now ${status}`,
                 title: complaint.title,
                 description: complaint.descriptionRaw,
                 status: status,

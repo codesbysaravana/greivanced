@@ -13,7 +13,7 @@ export default function RegisterPage() {
     return (
         <div>
             <h1 className={styles.title}>Create Account</h1>
-            <p className={styles.subtitle}>Join CivicResolve as a citizen</p>
+            <p className={styles.subtitle}>Join Greivanced as a citizen</p>
 
             {state?.error && <div className={styles.error}>{state.error}</div>}
 
