@@ -17,7 +17,8 @@ import {
     User as UserIcon,
     Shield,
     Briefcase,
-    UserCircle
+    UserCircle,
+    Flame
 } from 'lucide-react'
 
 // Define the Role type locally to avoid importing from @prisma/client in a client component
@@ -35,6 +36,7 @@ const SIDEBAR_LINKS: Record<string, any[]> = {
         { label: 'Complaints', href: '/admin/complaints', icon: ClipboardList },
         { label: 'Officers', href: '/admin/officers', icon: Users },
         { label: 'Wards', href: '/admin/wards', icon: Map },
+        { label: 'Silent Zones', href: '/admin/heatmap', icon: Flame },
     ],
     OFFICER: [
         { label: 'My Ward', href: '/officer/dashboard', icon: LayoutDashboard },

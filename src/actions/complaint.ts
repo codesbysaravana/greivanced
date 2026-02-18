@@ -6,6 +6,7 @@ import { getAuthSession } from '@/lib/jwt'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { UrgencyLevel } from '@prisma/client'
+import { classifyComplaint } from '@/lib/ai'
 
 const complaintSchema = z.object({
     title: z.string().min(5),
@@ -46,6 +47,23 @@ export async function createComplaint(prevState: ComplaintState, formData: FormD
 
     const { title, description, address, wardId, latitude, longitude, category, urgency, isAnonymous } = parsed.data
 
+    let finalCategoryId = category
+    // --- AI Enhancement ---
+    try {
+        console.log('[CreateComplaint] Attempting AI analysis for:', title)
+        const aiSuggestedId = await classifyComplaint(title, description)
+
+        if (aiSuggestedId) {
+            console.log(`[CreateComplaint] AI reclassified from user input (${category}) to: ${aiSuggestedId}`)
+            finalCategoryId = aiSuggestedId
+        } else {
+            console.log('[CreateComplaint] AI returned no suggestion, using user selection.')
+        }
+    } catch (aiError) {
+        console.warn('[CreateComplaint] AI step failed, proceeding with manual selection:', aiError)
+    }
+    // ---------------------
+
     try {
         const citizenId = session.userId
 
@@ -54,7 +72,7 @@ export async function createComplaint(prevState: ComplaintState, formData: FormD
                 title,
                 descriptionRaw: description,
                 address: address || null,
-                categoryId: category,
+                categoryId: finalCategoryId,
                 urgencyLevel: urgency as UrgencyLevel,
                 anonymousFlag: isAnonymous || false,
                 citizenId,
@@ -170,4 +188,44 @@ export async function getWardComplaintStats() {
             ...statusCounts,
         }
     })
+}
+
+export async function getCityComplaintHeatmap() {
+    const today = new Date()
+    const oneYearAgo = new Date(today)
+    oneYearAgo.setFullYear(today.getFullYear() - 1)
+
+    // Group by date, truncate time
+    // We fetch raw timestamps and aggregate in JS for simplicity with Prisma
+    const complaints = await prisma.complaint.findMany({
+        where: {
+            createdAt: {
+                gte: oneYearAgo
+            }
+        },
+        select: {
+            createdAt: true
+        }
+    })
+
+    const dateMap: Record<string, number> = {}
+
+    complaints.forEach(c => {
+        if (!c.createdAt) return
+        const dateStr = c.createdAt.toISOString().split('T')[0]
+        dateMap[dateStr] = (dateMap[dateStr] || 0) + 1
+    })
+
+    const data: { date: string; count: number }[] = []
+
+    // Fill in all dates for the year to ensure the calendar is contiguous
+    for (let d = new Date(oneYearAgo); d <= today; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().split('T')[0]
+        data.push({
+            date: dateStr,
+            count: dateMap[dateStr] || 0
+        })
+    }
+
+    return data
 }

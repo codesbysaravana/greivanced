@@ -55,7 +55,7 @@ export default function LoginPage() {
                 </Link>
             </div>
 
-            {/* Demo credentials for easy testing */}
+            {/*             
             <div className={styles.credentialsHint}>
                 <div className={styles.credentialsTitle}>Demo Credentials (password: SuperPassword2026)</div>
                 <div className={styles.credentialRow}>
@@ -70,7 +70,7 @@ export default function LoginPage() {
                     <span className={styles.credentialRole}>⚙️ Admin</span>
                     <span className={styles.credentialEmail}>superadmin@gov.in</span>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

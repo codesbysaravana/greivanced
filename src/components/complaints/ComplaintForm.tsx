@@ -28,6 +28,7 @@ export default function ComplaintForm({ wards, categories }: { wards: Ward[], ca
         }
 
         setLocationStatus('Locating...')
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 setCoords({
@@ -37,8 +38,30 @@ export default function ComplaintForm({ wards, categories }: { wards: Ward[], ca
                 setLocationStatus('Location acquired!')
             },
             (error) => {
-                setLocationStatus('Unable to retrieve your location')
-                console.error(error)
+                console.error('Geolocation error:', error)
+                let errorMessage = 'Unable to retrieve your location'
+
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage = 'User denied the request for Geolocation.'
+                        break
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage = 'Location information is unavailable.'
+                        break
+                    case error.TIMEOUT:
+                        errorMessage = 'The request to get user location timed out.'
+                        break
+                    default:
+                        errorMessage = 'An unknown error occurred.'
+                        break
+                }
+
+                setLocationStatus(errorMessage)
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
             }
         )
     }
